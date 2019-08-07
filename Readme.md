@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Ксения Буковская](https://up.htmlacademy.ru/ecmascript/9/user/818441).
-* Наставник: `Неизвестно`.
+* Наставник: `Артем Приходько`.
 
 ---
 
