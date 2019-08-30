@@ -11,7 +11,7 @@ module.exports = {
   devtool: `source-map`,
   devServer: {
     contentBase: buildPath,
-    publicPath: 'http:!/localhost:8080/',
+    publicPath: '/',
     compress: true,
     watchContentBase: true
   }
