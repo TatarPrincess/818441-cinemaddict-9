@@ -1,12 +1,12 @@
-import {getFilmCardMarkup} from './components/filmCard.js';
+import {getFilmCardMarkup} from './components/film-card.js';
 import {getFilterMarkup} from './components/filter.js';
 import {getSearchMarkup} from './components/search.js';
-import {getUserRankMarkup} from './components/userRank.js';
+import {getUserRankMarkup} from './components/user-rank.js';
 import {getSortMarkup} from './components/sort.js';
-import {getCardContainerMarkup} from './components/cardContainer.js';
+import {getCardContainerMarkup} from './components/card-container.js';
 import {getFilmData} from './components/data.js';
 import {getFilterData} from './components/data.js';
-import {getFooterStatMarkup} from './components/footerStat.js';
+import {getFooterStatMarkup} from './components/footer-stat.js';
 
 const CARDS_TOTAL_QUANTITY = 15;
 const CARDS_LOAD_QUANTITY_PORTION = 5;
