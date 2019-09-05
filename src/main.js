@@ -1,12 +1,13 @@
-import {getFilmCardMarkup} from './components/film-card.js';
-import {getFilterMarkup} from './components/filter.js';
-import {getSearchMarkup} from './components/search.js';
-import {getUserRankMarkup} from './components/user-rank.js';
-import {getSortMarkup} from './components/sort.js';
-import {getCardContainerMarkup} from './components/card-container.js';
+import {FilmCard} from './components/film-card.js';
+import {Filter} from './components/filter.js';
+import {Search} from './components/search.js';
+import {UserRank} from './components/user-rank.js';
+import {Sort} from './components/sort.js';
+import {CardContainer} from './components/card-container.js';
 import {getFilmData} from './components/data.js';
 import {getFilterData} from './components/data.js';
-import {getFooterStatMarkup} from './components/footer-stat.js';
+import {FooterStat} from './components/footer-stat.js';
+import {render} from './utils.js';
 
 const CARDS_TOTAL_QUANTITY = 15;
 const CARDS_LOAD_QUANTITY_PORTION = 5;
@@ -16,15 +17,7 @@ let loadedCardsQuantity = 0;
 let cardDataArrPortion = [];
 let lastPortion = 0;
 
-function Component(creator, adjEl, order, elOrder, params = ``) {
-  this.adjEl = adjEl;
-  this.creator = creator;
-  this.markup = creator(params);
-  this.drawOrder = order;
-  this.drawElOrder = elOrder;
-}
-
-const getFilmCardsList = (isLoadMore = false) => {
+const getFilmCardsObjArr = (isLoadMore = false) => {
 
   if (!isLoadMore) {
     for (let i = 1; i <= CARDS_TOTAL_QUANTITY; i++) {
@@ -38,54 +31,66 @@ const getFilmCardsList = (isLoadMore = false) => {
     return ``;
   }
 
-  let cardMarkupTotal = ``;
+  let cardObjArr = [];
   cardDataArrPortion.forEach((item) => {
-    cardMarkupTotal = cardMarkupTotal + getFilmCardMarkup(item);
+    cardObjArr.push(item);
     loadedCardsQuantity++;
   });
+
   if ((CARDS_TOTAL_QUANTITY - loadedCardsQuantity) < CARDS_LOAD_QUANTITY_PORTION) {
     lastPortion = 1;
   }
   cardDataArrPortion.splice(0, cardDataArrPortion.length);
 
-  return isLoadMore ? cardMarkupTotal : getCardContainerMarkup(cardMarkupTotal);
+  return cardObjArr;
 };
 
-const markupObjArray = [];
-const getFiltersMarkup = () => getFilterMarkup(getFilterData(cardDataArr));
+const componentObjArray = [];
 
-function fillMarkupObjArray() {
-  const adjElForSearch = document.querySelector(`.header`);
-  const adjMainEl = document.querySelector(`.main`);
-  const adjFooterEl = document.querySelector(`.footer`);
+function fillcomponentObjArray() {
+  const searchContainerEl = document.querySelector(`.header`);
+  const mainEl = document.querySelector(`.main`);
+  const footerEl = document.querySelector(`.footer`);
 
-  markupObjArray.push(new Component(getSearchMarkup, adjElForSearch, `beforeend`, 0));
-  markupObjArray.push(new Component(getUserRankMarkup, adjElForSearch, `beforeend`, 1, USER_RANK));
-  markupObjArray.push(new Component(getFilmCardsList, adjMainEl, `beforeend`, 4));
-  markupObjArray.push(new Component(getFiltersMarkup, adjMainEl, `beforeend`, 2));
-  markupObjArray.push(new Component(getSortMarkup, adjMainEl, `beforeend`, 3));
-  markupObjArray.push(new Component(getFooterStatMarkup, adjFooterEl, `beforeend`, 5, CARDS_TOTAL_QUANTITY));
+  componentObjArray.push(new Search({container: searchContainerEl, order: 0}));
+  componentObjArray.push(new UserRank({rank: USER_RANK, container: searchContainerEl, order: 1}));
+  componentObjArray.push(new CardContainer({container: mainEl, order: 4}));
+  getFilmCardsObjArr().forEach((item) => {
+    componentObjArray.push(new FilmCard({container: null, order: 5, filmCardObj: item}));
+  });
+  componentObjArray.push(new Filter({container: mainEl, order: 2, filterObjArr: getFilterData(cardDataArr)}));
+  componentObjArray.push(new Sort({container: mainEl, order: 3}));
+  componentObjArray.push(new FooterStat({quant: CARDS_TOTAL_QUANTITY, container: footerEl, order: 6}));
 
-  markupObjArray.sort((el1, el2) => el1.drawElOrder - el2.drawElOrder);
+  componentObjArray.sort((el1, el2) => el1._order - el2._order);
 }
 
-// рендер компонент
-function render(containerEl, markup, order) {
-  containerEl.insertAdjacentHTML(order, markup);
-}
+fillcomponentObjArray();
 
-fillMarkupObjArray();
-
-markupObjArray.forEach(function (item) {
-  render(item.adjEl, item.markup, item.drawOrder);
+componentObjArray.forEach(function (item) {
+  render(item._containerEl, item._element, item._callbackFunc, item._getContainer);
 });
 
+// LOAD MORE
 const loadMoreEl = document.querySelector(`.films-list__show-more`);
 const filmContainerEl = document.querySelector(`.films-list__container`);
+
 loadMoreEl.addEventListener(`click`, () => {
-  const markupLoadMoreTasks = getFilmCardsList(true);
-  render(filmContainerEl, markupLoadMoreTasks, `beforeend`);
+  const moreCardArr = [];
+
+  getFilmCardsObjArr(true).forEach((item) => {
+    moreCardArr.push(new FilmCard({container: null, order: 5, filmCardObj: item}));
+  });
+
+  const fragment = document.createDocumentFragment();
+  moreCardArr.forEach((item) => {
+    fragment.appendChild(item.getElement());
+  });
+  render(filmContainerEl, fragment);
+
   if (lastPortion) {
     loadMoreEl.className = `films-list__show-more visually-hidden`;
   }
+
 });
+
