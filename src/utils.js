@@ -16,10 +16,15 @@ export function deleteElement(element, object) {
 
 export function render(containerEl, element, callbackFunc, getContainerEl = null) {
 
+
   if (containerEl) {
     containerEl.appendChild(element);
   } else {
-    getContainerEl().appendChild(element);
+    if (typeof getContainerEl === `function`) {
+      getContainerEl().appendChild(element);
+    } else {
+      throw new Error(`Не передан метод для получения элемента-контейнера`);
+    }
   }
 
   if (callbackFunc) {

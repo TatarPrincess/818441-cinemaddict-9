@@ -83,6 +83,7 @@ loadMoreEl.addEventListener(`click`, () => {
   });
 
   const fragment = document.createDocumentFragment();
+
   moreCardArr.forEach((item) => {
     fragment.appendChild(item.getElement());
   });
