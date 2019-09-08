@@ -1,12 +1,11 @@
-import {createElement} from '../utils.js';
-import {render} from '../utils.js';
 import {FilmDetails} from './film-details.js';
+import {AbstractComponent} from './abstract-component.js';
+import {PageController} from '../page-controller.js';
 
-export class FilmCard {
-  constructor({container = null, order, filmCardObj: {title, posterSrc, description, year, duration, genre,
+export class FilmCard extends AbstractComponent {
+  constructor({order, filmCardObj: {title, posterSrc, description, year, duration, genre,
     rating, comments, isFavorite, alreadyWatched, toWatch, director, writers, actors, country, commentsDetail}}) {
-    this._containerEl = container;
-    this._getContainer = () => document.querySelector(`.films-list__container`);
+    super(null);
     this._order = order;
     this._title = title;
     this._posterSrc = posterSrc;
@@ -24,9 +23,29 @@ export class FilmCard {
     this._actors = actors;
     this._country = country;
     this.commentsDetail = commentsDetail;
-    this._callbackFunc = null;
-    this._element = this.getElement();
-    this._filmDetailsEl = null;
+  }
+  getContainer() {
+    return document.querySelector(`.films-list__container`);
+  }
+  callbackFunc() {
+    const clickEls = [this._element.querySelector(`.film-card__poster`),
+      this._element.querySelector(`.film-card__title`),
+      this._element.querySelector(`.film-card__comments`)];
+
+    clickEls.forEach((item) => {
+      item.addEventListener(`click`, () => {
+        if (!document.querySelector(`.film-details`)) {
+          let filmDetails = new FilmDetails(this._title,
+              this._posterSrc,
+              this._description,
+              this._year,
+              this._duration,
+              this._genre, this._rating, this._comments, this._isFavorite, this._alreadyWatched,
+              this._toWatch, this._director, this._writers, this._actors, this._country, this.commentsDetail);
+          new PageController(filmDetails.getContainer(), filmDetails).init();
+        }
+      });
+    });
   }
   getDtYear(ms) {
     const dt = new Date(ms);
@@ -52,42 +71,4 @@ export class FilmCard {
     </form>
     </article>`;
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    this._callbackFunc = () => {
-      const containerEl = document.querySelector(`body`);
-      const clickEls = [this._element.querySelector(`.film-card__poster`),
-        this._element.querySelector(`.film-card__title`), this._element.querySelector(`.film-card__comments`)];
-
-      clickEls.forEach((item) => {
-        item.addEventListener(`click`, () => {
-          if (!containerEl.querySelector(`.film-details`)) {
-            let filmDetails = new FilmDetails(this._title,
-                this._posterSrc,
-                this._description,
-                this._year,
-                this._duration,
-                this._genre, this._rating, this._comments, this._isFavorite, this._alreadyWatched,
-                this._toWatch, this._director, this._writers, this._actors, this._country, this.commentsDetail);
-            render(containerEl, filmDetails._element, filmDetails._callbackFunc);
-          }
-        });
-      });
-    };
-
-
-    return this._element;
-  }
-
-  removeElement() {
-    if (this._element) {
-      this._element = undefined;
-    }
-  }
-
-
 }

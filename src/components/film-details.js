@@ -1,12 +1,13 @@
-import {createElement} from '../utils.js';
 import {deleteElement} from '../utils.js';
 import {Comment} from '../components/comment.js';
+import {AbstractComponent} from './abstract-component.js';
 
-export class FilmDetails {
+export class FilmDetails extends AbstractComponent {
   constructor(title = ``, posterSrc = ``, description = ``, year = 2000,
       duration = ``, genre = [], rating = 10.0, comments = ``, isFavorite = false,
       alreadyWatched = false, toWatch = false, director = ``, writers = [], actors = [], country = ``,
       commentsDetail = []) {
+    super(null);
     this._title = title;
     this._posterSrc = posterSrc;
     this._description = description;
@@ -23,10 +24,19 @@ export class FilmDetails {
     this._actors = actors;
     this._country = country;
     this._commentsDetail = commentsDetail;
-    this._callbackFunc = null;
-    this._element = this.getElement();
   }
-
+  getContainer() {
+    return document.querySelector(`body`);
+  }
+  callbackFunc() {
+    const elClose = this._element.querySelector(`.film-details__close`);
+    elClose.addEventListener(`click`, () => {
+      if (document.querySelector(`.film-details`)) {
+        deleteElement(this._element);
+        this.removeElement(this._element);
+      }
+    });
+  }
   getDtMonth(ms) {
     const dt = new Date(ms);
     return dt.toLocaleString(`en`, {month: `long`});
@@ -168,27 +178,5 @@ export class FilmDetails {
       </div>
     </form>
   </section>`;
-  }
-  getElement() {
-
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    this._callbackFunc = () => {
-      const elClose = this._element.querySelector(`.film-details__close`);
-      elClose.addEventListener(`click`, () => {
-        if (document.querySelector(`.film-details`)) {
-          deleteElement(this._element, this);
-        }
-      });
-    };
-
-    return this._element;
-  }
-  removeElement() {
-    if (this._element) {
-      this._element = undefined;
-    }
   }
 }

@@ -1,11 +1,9 @@
-import {createElement} from '../utils.js';
+import {AbstractComponent} from './abstract-component.js';
 
-export class CardContainer {
-  constructor({container, order}) {
-    this._containerEl = container;
-    this._getContainer = null;
+export class CardContainer extends AbstractComponent {
+  constructor({order}) {
+    super(null);
     this._order = order;
-    this._element = this.getElement();
   }
   getTemplate() {
     return `<section class="films">
@@ -14,8 +12,6 @@ export class CardContainer {
 
       <div class="films-list__container">
       </div>
-
-      <button class="films-list__show-more">Show more</button>
     </section>
 
     <section class="films-list--extra">
@@ -102,16 +98,5 @@ export class CardContainer {
       </div>
     </section>
   </section>`;
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    if (this._element) {
-      this._element = undefined;
-    }
   }
 }

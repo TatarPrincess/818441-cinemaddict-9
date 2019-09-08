@@ -1,5 +1,8 @@
-export class Comment {
+import {AbstractComponent} from './abstract-component.js';
+
+export class Comment extends AbstractComponent {
   constructor({emoji, text, author, daysAgo, isDeleted}) {
+    super(null);
     this._emoji = emoji;
     this._text = text;
     this._author = author;
@@ -21,6 +24,4 @@ export class Comment {
     </div>
   </li>`;
   }
-
-
 }

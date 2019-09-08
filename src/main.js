@@ -7,7 +7,8 @@ import {CardContainer} from './components/card-container.js';
 import {getFilmData} from './components/data.js';
 import {getFilterData} from './components/data.js';
 import {FooterStat} from './components/footer-stat.js';
-import {render} from './utils.js';
+import {PageController} from './page-controller.js';
+import {LoadMore} from './components/load-more.js';
 
 const CARDS_TOTAL_QUANTITY = 15;
 const CARDS_LOAD_QUANTITY_PORTION = 5;
@@ -15,9 +16,9 @@ const USER_RANK = `Movie Buff`;
 let cardDataArr = [];
 let loadedCardsQuantity = 0;
 let cardDataArrPortion = [];
-let lastPortion = 0;
+export let lastPortion = 0;
 
-const getFilmCardsObjArr = (isLoadMore = false) => {
+export const getFilmCardsObjArr = (isLoadMore = false) => {
 
   if (!isLoadMore) {
     for (let i = 1; i <= CARDS_TOTAL_QUANTITY; i++) {
@@ -52,46 +53,24 @@ function fillcomponentObjArray() {
   const mainEl = document.querySelector(`.main`);
   const footerEl = document.querySelector(`.footer`);
 
-  componentObjArray.push(new Search({container: searchContainerEl, order: 0}));
-  componentObjArray.push(new UserRank({rank: USER_RANK, container: searchContainerEl, order: 1}));
-  componentObjArray.push(new CardContainer({container: mainEl, order: 4}));
+  componentObjArray.push({container: searchContainerEl, dataObj: new Search(0)});
+  componentObjArray.push({container: searchContainerEl, dataObj: new UserRank({rank: USER_RANK, order: 1})});
+  componentObjArray.push({container: mainEl, dataObj: new CardContainer({order: 4})});
   getFilmCardsObjArr().forEach((item) => {
-    componentObjArray.push(new FilmCard({container: null, order: 5, filmCardObj: item}));
+    componentObjArray.push({container: null, dataObj: new FilmCard({order: 5, filmCardObj: item})});
   });
-  componentObjArray.push(new Filter({container: mainEl, order: 2, filterObjArr: getFilterData(cardDataArr)}));
-  componentObjArray.push(new Sort({container: mainEl, order: 3}));
-  componentObjArray.push(new FooterStat({quant: CARDS_TOTAL_QUANTITY, container: footerEl, order: 6}));
+  componentObjArray.push({container: null, dataObj: new LoadMore(6)});
+  componentObjArray.push({container: mainEl, dataObj: new Filter({order: 2, filterObjArr: getFilterData(cardDataArr)})});
+  componentObjArray.push({container: mainEl, dataObj: new Sort({order: 3})});
+  componentObjArray.push({container: footerEl, dataObj: new FooterStat({quant: CARDS_TOTAL_QUANTITY, order: 7})});
 
-  componentObjArray.sort((el1, el2) => el1._order - el2._order);
+  componentObjArray.sort((el1, el2) => el1.dataObj._order - el2.dataObj._order);
 }
 
 fillcomponentObjArray();
 
 componentObjArray.forEach(function (item) {
-  render(item._containerEl, item._element, item._callbackFunc, item._getContainer);
+  new PageController(item.container, item.dataObj).init();
 });
 
-// LOAD MORE
-const loadMoreEl = document.querySelector(`.films-list__show-more`);
-const filmContainerEl = document.querySelector(`.films-list__container`);
-
-loadMoreEl.addEventListener(`click`, () => {
-  const moreCardArr = [];
-
-  getFilmCardsObjArr(true).forEach((item) => {
-    moreCardArr.push(new FilmCard({container: null, order: 5, filmCardObj: item}));
-  });
-
-  const fragment = document.createDocumentFragment();
-
-  moreCardArr.forEach((item) => {
-    fragment.appendChild(item.getElement());
-  });
-  render(filmContainerEl, fragment);
-
-  if (lastPortion) {
-    loadMoreEl.className = `films-list__show-more visually-hidden`;
-  }
-
-});
 
