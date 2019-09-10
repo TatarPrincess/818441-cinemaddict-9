@@ -1,11 +1,11 @@
 import {createElement} from '../utils.js';
 
 export class AbstractComponent {
-  constructor(element) {
+  constructor() {
     if (new.target === AbstractComponent) {
       throw new Error(`Can't instantiate AbstractComponent, only concrete one.`);
     }
-    this._element = element;
+    this._element = null;
   }
   getContainer() {
     return null;

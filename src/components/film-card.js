@@ -3,26 +3,25 @@ import {AbstractComponent} from './abstract-component.js';
 import {PageController} from '../page-controller.js';
 
 export class FilmCard extends AbstractComponent {
-  constructor({order, filmCardObj: {title, posterSrc, description, year, duration, genre,
-    rating, comments, isFavorite, alreadyWatched, toWatch, director, writers, actors, country, commentsDetail}}) {
-    super(null);
+  constructor({order, filmCardObj}) {
+    super();
     this._order = order;
-    this._title = title;
-    this._posterSrc = posterSrc;
-    this._description = description;
-    this._year = year;
-    this._duration = duration;
-    this._genre = genre;
-    this._rating = rating;
-    this._comments = comments;
-    this._isFavorite = isFavorite;
-    this._alreadyWatched = alreadyWatched;
-    this._toWatch = toWatch;
-    this._director = director;
-    this._writers = writers;
-    this._actors = actors;
-    this._country = country;
-    this.commentsDetail = commentsDetail;
+    this._title = filmCardObj.title;
+    this._posterSrc = filmCardObj.posterSrc;
+    this._description = filmCardObj.description;
+    this._year = filmCardObj.year;
+    this._duration = filmCardObj.duration;
+    this._genre = filmCardObj.genre;
+    this._rating = filmCardObj.rating;
+    this._comments = filmCardObj.comments;
+    this._isFavorite = filmCardObj.isFavorite;
+    this._alreadyWatched = filmCardObj.alreadyWatched;
+    this._toWatch = filmCardObj.toWatch;
+    this._director = filmCardObj.director;
+    this._writers = filmCardObj.writers;
+    this._actors = filmCardObj.actors;
+    this._country = filmCardObj.country;
+    this.commentsDetail = filmCardObj.commentsDetail;
   }
   getContainer() {
     return document.querySelector(`.films-list__container`);

@@ -2,7 +2,7 @@ import {AbstractComponent} from './abstract-component.js';
 
 export class UserRank extends AbstractComponent {
   constructor({rank, order}) {
-    super(null);
+    super();
     this._rating = rank;
     this._order = order;
   }

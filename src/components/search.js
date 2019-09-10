@@ -2,7 +2,7 @@ import {AbstractComponent} from './abstract-component.js';
 
 export class Search extends AbstractComponent {
   constructor(order) {
-    super(null);
+    super();
     this._order = order;
   }
   getTemplate() {

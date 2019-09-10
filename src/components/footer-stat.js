@@ -2,7 +2,7 @@ import {AbstractComponent} from './abstract-component.js';
 
 export class FooterStat extends AbstractComponent {
   constructor({quant, order}) {
-    super(null);
+    super();
     this._amount = quant;
     this._order = order;
   }

@@ -7,7 +7,7 @@ export class FilmDetails extends AbstractComponent {
       duration = ``, genre = [], rating = 10.0, comments = ``, isFavorite = false,
       alreadyWatched = false, toWatch = false, director = ``, writers = [], actors = [], country = ``,
       commentsDetail = []) {
-    super(null);
+    super();
     this._title = title;
     this._posterSrc = posterSrc;
     this._description = description;

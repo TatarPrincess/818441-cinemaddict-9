@@ -2,7 +2,7 @@ import {AbstractComponent} from './abstract-component.js';
 
 export class Filter extends AbstractComponent {
   constructor({order, filterObjArr = []}) {
-    super(null);
+    super();
     let [all, watchList, history, favorities] = Array.from(filterObjArr);
     this._all = all;
     this._watchList = watchList;

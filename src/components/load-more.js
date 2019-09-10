@@ -5,7 +5,7 @@ import {PageController} from '../page-controller.js';
 
 export class LoadMore extends AbstractComponent {
   constructor(order) {
-    super(null);
+    super();
     this._order = order;
   }
   getContainer() {
