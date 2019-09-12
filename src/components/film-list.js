@@ -15,8 +15,8 @@ export class FilmList extends AbstractComponent {
     const cardEls = Array.from(this._element.querySelectorAll(`.film-card`));
     for (let i = 0; i <= cardEls.length - 1; i++) {
       let cardClickEls = [cardEls[i].querySelector(`.film-card__poster`),
-      cardEls[i].querySelector(`.film-card__title`),
-      cardEls[i].querySelector(`.film-card__comments`)];
+        cardEls[i].querySelector(`.film-card__title`),
+        cardEls[i].querySelector(`.film-card__comments`)];
       cardClickEls.forEach((item) => {
         item.addEventListener(`click`, () => {
           let filmDetails = new FilmDetails(this._filmObjArr[i]);
