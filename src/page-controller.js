@@ -1,5 +1,3 @@
-import {render} from './utils.js';
-
 export class PageController {
   constructor(container, dataObj) {
     this._container = container;
@@ -16,8 +14,7 @@ export class PageController {
       throw new Error(`Не передан метод для получения элемента-контейнера`);
     }
 
-    this.getElement();
-    render(this._container, this._dataObj._element);
+    this._dataObj.render(this._container);
 
     if (this._dataObj.callbackFunc && typeof this._dataObj.callbackFunc === `function`) {
       this._dataObj.callbackFunc();

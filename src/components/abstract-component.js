@@ -20,10 +20,14 @@ export class AbstractComponent {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
+    return this._element;
   }
   removeElement() {
     if (this._element) {
       this._element = null;
     }
+  }
+  render(containerEl) {
+    containerEl.appendChild(this.getElement());
   }
 }

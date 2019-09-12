@@ -1,11 +1,9 @@
-import {FilmDetails} from './film-details.js';
 import {AbstractComponent} from './abstract-component.js';
-import {PageController} from '../page-controller.js';
 
 export class FilmCard extends AbstractComponent {
-  constructor({order, filmCardObj}) {
+  constructor(filmCardObj) {
     super();
-    this._order = order;
+    this.id = filmCardObj.id;
     this._title = filmCardObj.title;
     this._posterSrc = filmCardObj.posterSrc;
     this._description = filmCardObj.description;
@@ -21,36 +19,17 @@ export class FilmCard extends AbstractComponent {
     this._writers = filmCardObj.writers;
     this._actors = filmCardObj.actors;
     this._country = filmCardObj.country;
-    this.commentsDetail = filmCardObj.commentsDetail;
-  }
-  getContainer() {
-    return document.querySelector(`.films-list__container`);
-  }
-  callbackFunc() {
-    const clickEls = [this._element.querySelector(`.film-card__poster`),
-      this._element.querySelector(`.film-card__title`),
-      this._element.querySelector(`.film-card__comments`)];
-
-    clickEls.forEach((item) => {
-      item.addEventListener(`click`, () => {
-        if (!document.querySelector(`.film-details`)) {
-          let filmDetails = new FilmDetails(this._title,
-              this._posterSrc,
-              this._description,
-              this._year,
-              this._duration,
-              this._genre, this._rating, this._comments, this._isFavorite, this._alreadyWatched,
-              this._toWatch, this._director, this._writers, this._actors, this._country, this.commentsDetail);
-          new PageController(filmDetails.getContainer(), filmDetails).init();
-        }
-      });
-    });
+    this._commentsDetail = filmCardObj.commentsDetail;
+    this.isNeedRenderDetails = false;
   }
   getDtYear(ms) {
     const dt = new Date(ms);
     return dt.getFullYear();
   }
-
+  render() {
+    this._element = this.getTemplate();
+    return this._element;
+  }
   getTemplate() {
     return `<article class="film-card">
     <h3 class="film-card__title">${this._title}</h3>

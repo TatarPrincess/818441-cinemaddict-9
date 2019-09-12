@@ -1,16 +1,46 @@
 import {AbstractComponent} from './abstract-component.js';
+import {FilmCard} from './film-card.js';
+import {FilmDetails} from './film-details.js';
+import {PageController} from '../page-controller.js';
+import {createElement} from '../utils.js';
 
-export class CardContainer extends AbstractComponent {
-  constructor({order}) {
+export class FilmList extends AbstractComponent {
+  constructor({order, filmObjArr}) {
     super();
     this._order = order;
+    this._filmObjArr = filmObjArr.sort((el1, el2) => el1.id - el2.id);
+    this.openedCardEl = null;
   }
-  getTemplate() {
+  callbackFunc() {
+    const cardEls = Array.from(this._element.querySelectorAll(`.film-card`));
+    for (let i = 0; i <= cardEls.length - 1; i++) {
+      let cardClickEls = [cardEls[i].querySelector(`.film-card__poster`),
+      cardEls[i].querySelector(`.film-card__title`),
+      cardEls[i].querySelector(`.film-card__comments`)];
+      cardClickEls.forEach((item) => {
+        item.addEventListener(`click`, () => {
+          let filmDetails = new FilmDetails(this._filmObjArr[i]);
+          const container = document.querySelector(`body`);
+          new PageController(container, filmDetails).init();
+        });
+      });
+    }
+  }
+  render(containerEl) {
+    let filmsStr = ``;
+    this._filmObjArr.forEach((item) => {
+      filmsStr = filmsStr + new FilmCard(item).render();
+    });
+    this._element = createElement(this.getTemplate(filmsStr));
+    super.render(containerEl);
+  }
+  getTemplate(str) {
     return `<section class="films">
     <section class="films-list">
       <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
 
       <div class="films-list__container">
+      ${str}
       </div>
     </section>
 

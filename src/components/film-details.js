@@ -1,41 +1,16 @@
 import {deleteElement} from '../utils.js';
 import {Comment} from '../components/comment.js';
-import {AbstractComponent} from './abstract-component.js';
+import {FilmCard} from './film-card.js';
 
-export class FilmDetails extends AbstractComponent {
-  constructor(title = ``, posterSrc = ``, description = ``, year = 2000,
-      duration = ``, genre = [], rating = 10.0, comments = ``, isFavorite = false,
-      alreadyWatched = false, toWatch = false, director = ``, writers = [], actors = [], country = ``,
-      commentsDetail = []) {
-    super();
-    this._title = title;
-    this._posterSrc = posterSrc;
-    this._description = description;
-    this._year = year;
-    this._duration = duration;
-    this._genre = genre;
-    this._rating = rating;
-    this._comments = comments;
-    this._isFavorite = isFavorite;
-    this._alreadyWatched = alreadyWatched;
-    this._toWatch = toWatch;
-    this._director = director;
-    this._writers = writers;
-    this._actors = actors;
-    this._country = country;
-    this._commentsDetail = commentsDetail;
+export class FilmDetails extends FilmCard {
+  constructor(filmCardObj) {
+    super(filmCardObj);
   }
   getContainer() {
     return document.querySelector(`body`);
   }
-  callbackFunc() {
-    const elClose = this._element.querySelector(`.film-details__close`);
-    elClose.addEventListener(`click`, () => {
-      if (document.querySelector(`.film-details`)) {
-        deleteElement(this._element);
-        this.removeElement(this._element);
-      }
-    });
+  render(containerEl) {
+    containerEl.appendChild(this.getElement());
   }
   getDtMonth(ms) {
     const dt = new Date(ms);
@@ -52,6 +27,14 @@ export class FilmDetails extends AbstractComponent {
     return dt.toLocaleString(`en`, {day: `numeric`});
   }
 
+  callbackFunc() {
+    const elClose = this._element.querySelector(`.film-details__close`);
+    elClose.addEventListener(`click`, () => {
+      if (document.querySelector(`.film-details`)) {
+        deleteElement(this._element, this);
+      }
+    });
+  }
   getTemplate() {
     let str = ``;
     this._genre.forEach((element) => {
