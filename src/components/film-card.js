@@ -1,38 +1,35 @@
-import {createElement} from '../utils.js';
-import {render} from '../utils.js';
-import {FilmDetails} from './film-details.js';
+import {AbstractComponent} from './abstract-component.js';
 
-export class FilmCard {
-  constructor({container = null, order, filmCardObj: {title, posterSrc, description, year, duration, genre,
-    rating, comments, isFavorite, alreadyWatched, toWatch, director, writers, actors, country, commentsDetail}}) {
-    this._containerEl = container;
-    this._getContainer = () => document.querySelector(`.films-list__container`);
-    this._order = order;
-    this._title = title;
-    this._posterSrc = posterSrc;
-    this._description = description;
-    this._year = year;
-    this._duration = duration;
-    this._genre = genre;
-    this._rating = rating;
-    this._comments = comments;
-    this._isFavorite = isFavorite;
-    this._alreadyWatched = alreadyWatched;
-    this._toWatch = toWatch;
-    this._director = director;
-    this._writers = writers;
-    this._actors = actors;
-    this._country = country;
-    this.commentsDetail = commentsDetail;
-    this._callbackFunc = null;
-    this._element = this.getElement();
-    this._filmDetailsEl = null;
+export class FilmCard extends AbstractComponent {
+  constructor(filmCardObj) {
+    super();
+    this.id = filmCardObj.id;
+    this._title = filmCardObj.title;
+    this._posterSrc = filmCardObj.posterSrc;
+    this._description = filmCardObj.description;
+    this._year = filmCardObj.year;
+    this._duration = filmCardObj.duration;
+    this._genre = filmCardObj.genre;
+    this._rating = filmCardObj.rating;
+    this._comments = filmCardObj.comments;
+    this._isFavorite = filmCardObj.isFavorite;
+    this._alreadyWatched = filmCardObj.alreadyWatched;
+    this._toWatch = filmCardObj.toWatch;
+    this._director = filmCardObj.director;
+    this._writers = filmCardObj.writers;
+    this._actors = filmCardObj.actors;
+    this._country = filmCardObj.country;
+    this._commentsDetail = filmCardObj.commentsDetail;
+    this.isNeedRenderDetails = false;
   }
   getDtYear(ms) {
     const dt = new Date(ms);
     return dt.getFullYear();
   }
-
+  render() {
+    this._element = this.getTemplate();
+    return this._element;
+  }
   getTemplate() {
     return `<article class="film-card">
     <h3 class="film-card__title">${this._title}</h3>
@@ -52,42 +49,4 @@ export class FilmCard {
     </form>
     </article>`;
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    this._callbackFunc = () => {
-      const containerEl = document.querySelector(`body`);
-      const clickEls = [this._element.querySelector(`.film-card__poster`),
-        this._element.querySelector(`.film-card__title`), this._element.querySelector(`.film-card__comments`)];
-
-      clickEls.forEach((item) => {
-        item.addEventListener(`click`, () => {
-          if (!containerEl.querySelector(`.film-details`)) {
-            let filmDetails = new FilmDetails(this._title,
-                this._posterSrc,
-                this._description,
-                this._year,
-                this._duration,
-                this._genre, this._rating, this._comments, this._isFavorite, this._alreadyWatched,
-                this._toWatch, this._director, this._writers, this._actors, this._country, this.commentsDetail);
-            render(containerEl, filmDetails._element, filmDetails._callbackFunc);
-          }
-        });
-      });
-    };
-
-
-    return this._element;
-  }
-
-  removeElement() {
-    if (this._element) {
-      this._element = undefined;
-    }
-  }
-
-
 }

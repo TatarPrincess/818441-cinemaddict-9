@@ -1,11 +1,9 @@
-import {createElement} from '../utils.js';
+import {AbstractComponent} from './abstract-component.js';
 
-export class Search {
-  constructor({container, order}) {
-    this._containerEl = container;
-    this._getContainer = null;
+export class Search extends AbstractComponent {
+  constructor(order) {
+    super();
     this._order = order;
-    this._element = this.getElement();
   }
   getTemplate() {
     return `<form class="header__search search">
@@ -16,16 +14,5 @@ export class Search {
     <button type="submit" class="visually-hidden">Search</button>
     <button class="search__reset" type="reset">Reset</button>
     </form>`;
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    if (this._element) {
-      this._element = undefined;
-    }
   }
 }

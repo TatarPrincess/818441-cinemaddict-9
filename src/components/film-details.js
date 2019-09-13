@@ -1,32 +1,17 @@
-import {createElement} from '../utils.js';
 import {deleteElement} from '../utils.js';
 import {Comment} from '../components/comment.js';
+import {FilmCard} from './film-card.js';
 
-export class FilmDetails {
-  constructor(title = ``, posterSrc = ``, description = ``, year = 2000,
-      duration = ``, genre = [], rating = 10.0, comments = ``, isFavorite = false,
-      alreadyWatched = false, toWatch = false, director = ``, writers = [], actors = [], country = ``,
-      commentsDetail = []) {
-    this._title = title;
-    this._posterSrc = posterSrc;
-    this._description = description;
-    this._year = year;
-    this._duration = duration;
-    this._genre = genre;
-    this._rating = rating;
-    this._comments = comments;
-    this._isFavorite = isFavorite;
-    this._alreadyWatched = alreadyWatched;
-    this._toWatch = toWatch;
-    this._director = director;
-    this._writers = writers;
-    this._actors = actors;
-    this._country = country;
-    this._commentsDetail = commentsDetail;
-    this._callbackFunc = null;
-    this._element = this.getElement();
+export class FilmDetails extends FilmCard {
+  constructor(filmCardObj) {
+    super(filmCardObj);
   }
-
+  getContainer() {
+    return document.querySelector(`body`);
+  }
+  render(containerEl) {
+    containerEl.appendChild(this.getElement());
+  }
   getDtMonth(ms) {
     const dt = new Date(ms);
     return dt.toLocaleString(`en`, {month: `long`});
@@ -42,6 +27,14 @@ export class FilmDetails {
     return dt.toLocaleString(`en`, {day: `numeric`});
   }
 
+  callbackFunc() {
+    const elClose = this._element.querySelector(`.film-details__close`);
+    elClose.addEventListener(`click`, () => {
+      if (document.querySelector(`.film-details`)) {
+        deleteElement(this._element, this);
+      }
+    });
+  }
   getTemplate() {
     let str = ``;
     this._genre.forEach((element) => {
@@ -168,27 +161,5 @@ export class FilmDetails {
       </div>
     </form>
   </section>`;
-  }
-  getElement() {
-
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    this._callbackFunc = () => {
-      const elClose = this._element.querySelector(`.film-details__close`);
-      elClose.addEventListener(`click`, () => {
-        if (document.querySelector(`.film-details`)) {
-          deleteElement(this._element, this);
-        }
-      });
-    };
-
-    return this._element;
-  }
-  removeElement() {
-    if (this._element) {
-      this._element = undefined;
-    }
   }
 }
