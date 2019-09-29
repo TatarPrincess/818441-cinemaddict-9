@@ -1,10 +1,9 @@
 import {AbstractComponent} from './abstract-component.js';
 
 export class UserRank extends AbstractComponent {
-  constructor({rank, order}) {
+  constructor(rank) {
     super();
     this._rating = rank;
-    this._order = order;
   }
   getTemplate() {
     return `<section class="header__profile profile">

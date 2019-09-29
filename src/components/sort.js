@@ -1,9 +1,8 @@
 import {AbstractComponent} from './abstract-component.js';
 
 export class Sort extends AbstractComponent {
-  constructor({order}) {
+  constructor() {
     super();
-    this._order = order;
   }
   getTemplate() {
     return `<ul class="sort">

@@ -1,14 +1,13 @@
 import {AbstractComponent} from './abstract-component.js';
 
 export class Filter extends AbstractComponent {
-  constructor({order, filterObjArr = []}) {
+  constructor(filterObjArr = []) {
     super();
     let [all, watchList, history, favorities] = Array.from(filterObjArr);
     this._all = all;
     this._watchList = watchList;
     this._history = history;
     this._favorities = favorities;
-    this._order = order;
   }
   getTemplate() {
     return `<nav class="main-navigation">

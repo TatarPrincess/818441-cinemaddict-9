@@ -1,50 +1,52 @@
-import {deleteElement} from '../utils.js';
 import {Comment} from '../components/comment.js';
 import {FilmCard} from './film-card.js';
+import {FilmDetailsRating} from './film-details-rating.js';
 
 export class FilmDetails extends FilmCard {
   constructor(filmCardObj) {
     super(filmCardObj);
   }
-  getContainer() {
-    return document.querySelector(`body`);
-  }
-  render(containerEl) {
-    containerEl.appendChild(this.getElement());
-  }
+
   getDtMonth(ms) {
     const dt = new Date(ms);
     return dt.toLocaleString(`en`, {month: `long`});
   }
-
   getDtDay(ms) {
     const dt = new Date(ms);
     return dt.toLocaleString(`en`, {year: `numeric`});
   }
-
   getDtYear(ms) {
     const dt = new Date(ms);
     return dt.toLocaleString(`en`, {day: `numeric`});
   }
-
-  callbackFunc() {
-    const elClose = this._element.querySelector(`.film-details__close`);
-    elClose.addEventListener(`click`, () => {
-      if (document.querySelector(`.film-details`)) {
-        deleteElement(this._element, this);
-      }
-    });
+  alreadyWatchedReaction() {
+    const posterSrcEl = document.querySelector(`.film-details__poster-img`);
+    if (this._alreadyWatched === `true`) {
+      const container = document.querySelector(`.film-details__inner`);
+      const beforeEl = document.querySelector(`.form-details__bottom-container`);
+      const filmDetailRatingObj = new FilmDetailsRating(posterSrcEl.src, this._alreadyWatched);
+      filmDetailRatingObj.unrender();
+      filmDetailRatingObj.render(container, beforeEl);
+    } else {
+      new FilmDetailsRating(posterSrcEl.src, this._alreadyWatched).unrender();
+    }
   }
+
+  render(containerEl) {
+    containerEl.appendChild(this.getElement());
+    this.alreadyWatchedReaction();
+  }
+
   getTemplate() {
     let str = ``;
     this._genre.forEach((element) => {
-      str = str + `<span class="film-details__genre">${element}</span>`;
+      str = str + `<span class="film-details__genre">${element}, </span>`;
     });
     let comms = ``;
-    this._commentsDetail.forEach((element) => {
+    this._comments.forEach((element) => {
       comms = comms + new Comment(element).getTemplate();
     });
-    return `<section class="film-details">
+    return `<section class="film-details" id = ${this.id}>
     <form class="film-details__inner" action="" method="get">
       <div class="form-details__top-container">
         <div class="film-details__close">
@@ -109,13 +111,13 @@ export class FilmDetails extends FilmCard {
         </div>
 
         <section class="film-details__controls">
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" val = ${this._toWatch}>
           <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" val = ${this._alreadyWatched}>
           <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-          <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+          <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" val = ${this._isFavorite}>
           <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
         </section>
       </div>
@@ -129,7 +131,9 @@ export class FilmDetails extends FilmCard {
           </ul>
 
           <div class="film-details__new-comment">
-            <div for="add-emoji" class="film-details__add-emoji-label"></div>
+            <div for="add-emoji" class="film-details__add-emoji-label">
+            <img class="visually-hidden" src="" width="55" height="55" alt="emoji">
+            </div>
 
             <label class="film-details__comment-label">
               <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
@@ -138,22 +142,22 @@ export class FilmDetails extends FilmCard {
             <div class="film-details__emoji-list">
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="sleeping">
               <label class="film-details__emoji-label" for="emoji-smile">
-                <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
+                <img class="film-details__emoji-label-img" src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
               </label>
 
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="neutral-face">
               <label class="film-details__emoji-label" for="emoji-sleeping">
-                <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
+                <img class="film-details__emoji-label-img" src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
               </label>
 
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-gpuke" value="grinning">
               <label class="film-details__emoji-label" for="emoji-gpuke">
-                <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
+                <img class="film-details__emoji-label-img" src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
               </label>
 
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="grinning">
               <label class="film-details__emoji-label" for="emoji-angry">
-                <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
+                <img class="film-details__emoji-label-img" src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
               </label>
             </div>
           </div>
@@ -162,4 +166,6 @@ export class FilmDetails extends FilmCard {
     </form>
   </section>`;
   }
+
+
 }

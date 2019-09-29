@@ -1,10 +1,9 @@
 import {AbstractComponent} from './abstract-component.js';
 
 export class FooterStat extends AbstractComponent {
-  constructor({quant, order}) {
+  constructor(quant) {
     super();
     this._amount = quant;
-    this._order = order;
   }
   getTemplate() {
     return `<section class="header__profile profile">

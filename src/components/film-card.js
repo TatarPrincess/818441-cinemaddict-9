@@ -11,7 +11,6 @@ export class FilmCard extends AbstractComponent {
     this._duration = filmCardObj.duration;
     this._genre = filmCardObj.genre;
     this._rating = filmCardObj.rating;
-    this._comments = filmCardObj.comments;
     this._isFavorite = filmCardObj.isFavorite;
     this._alreadyWatched = filmCardObj.alreadyWatched;
     this._toWatch = filmCardObj.toWatch;
@@ -19,7 +18,7 @@ export class FilmCard extends AbstractComponent {
     this._writers = filmCardObj.writers;
     this._actors = filmCardObj.actors;
     this._country = filmCardObj.country;
-    this._commentsDetail = filmCardObj.commentsDetail;
+    this._comments = filmCardObj.comments;
     this.isNeedRenderDetails = false;
   }
   getDtYear(ms) {
@@ -31,7 +30,7 @@ export class FilmCard extends AbstractComponent {
     return this._element;
   }
   getTemplate() {
-    return `<article class="film-card">
+    return `<article class="film-card" id = ${this.id}>
     <h3 class="film-card__title">${this._title}</h3>
     <p class="film-card__rating">${this._rating}</p>
     <p class="film-card__info">
@@ -41,8 +40,9 @@ export class FilmCard extends AbstractComponent {
     </p>
     <img src="${this._posterSrc}" alt="" class="film-card__poster">
     <p class="film-card__description">${this._description}</p>
-    <a class="film-card__comments">${this._comments}</a>
-    <form class="film-card__controls">
+    <a class="film-card__comments">${this._comments.length} comments</a>
+    <form class="film-card__controls" toWatch = ${this._toWatch}
+    alreadyWatched = ${this._alreadyWatched} isFavorite = ${this._isFavorite}>
       <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
       <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">Mark as watched</button>
       <button class="film-card__controls-item button film-card__controls-item--favorite">Mark as favorite</button>
