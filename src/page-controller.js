@@ -7,6 +7,7 @@ import {FilmDetails} from './components/film-details.js';
 import {getFilterData} from './components/data.js';
 import {FooterStat} from './components/footer-stat.js';
 import {MovieController} from './movie-controller.js';
+import {createElement} from './utils.js';
 
 
 export class PageController {
@@ -98,7 +99,8 @@ export class PageController {
     function reRenderFilms() {
       const filmDetailOpenedEl = document.querySelector(`.film-details`);
       this._movieControllerObj = new MovieController({data: this._cardDataArr,
-        onDataChange: this.onDataChange.bind(this), onChangeView: this.onChangeView.bind(this)});
+        onDataChange: this.onDataChange.bind(this), onChangeView: this.onChangeView.bind(this),
+        cardContainer: this.getCardContainer()});
       this._subscriptions.push(this._movieControllerObj.setDefaultView);
       this._movieControllerObj.unrender();
       this._movieControllerObj.render(this._mainEl, this._movieControllerObj);
@@ -122,9 +124,16 @@ export class PageController {
   onChangeView() {
     this._subscriptions.forEach((subscription) => subscription());
   }
+  getCardContainer() {
+    const template = `<section class="films-list">
+    <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
+    </section>`;
+    return createElement(template);
+  }
   getMovieControllerObj() {
     this._movieControllerObj = new MovieController({data: this._cardDataArr,
-      onDataChange: this.onDataChange.bind(this), onChangeView: this.onChangeView.bind(this)});
+      onDataChange: this.onDataChange.bind(this), onChangeView: this.onChangeView.bind(this),
+      cardContainer: this.getCardContainer()});
     this._subscriptions.push(this._movieControllerObj.setDefaultView);
   }
   getcomponentObjArray() {

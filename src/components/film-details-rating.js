@@ -64,6 +64,8 @@ export class FilmDetailsRating extends AbstractComponent {
   }
 
   render(containerEl, beforeEl) {
-    containerEl.insertBefore(this.getElement(), beforeEl);
+    if (this._alreadyWatched !== `false`) {
+      containerEl.insertBefore(this.getElement(), beforeEl);
+    }
   }
 }

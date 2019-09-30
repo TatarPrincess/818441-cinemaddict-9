@@ -7,7 +7,7 @@ import {LoadMore} from "./components/load-more";
 import {deleteElement, processIfEnterEvent} from "./utils.js";
 
 export class MovieController extends AbstractComponent {
-  constructor({data, onDataChange, onChangeView}) {
+  constructor({data, onDataChange, onChangeView, cardContainer}) {
     super();
     this._data = data;
     this._onDataChange = onDataChange;
@@ -21,6 +21,7 @@ export class MovieController extends AbstractComponent {
     this._filmListObj = null;
     this._filmListExtraObj = [];
     this._cardDataArrPortion = [];
+    this._cardContainer = cardContainer;
   }
 
   getFilmCardsObjArr() {
@@ -38,8 +39,8 @@ export class MovieController extends AbstractComponent {
   }
   setDefaultView() {
     const popupEl = document.querySelector(`.film-details`);
-    const parent = document.querySelector(`body`);
-    if (parent.contains(popupEl)) {
+
+    if (popupEl) {
       deleteElement(popupEl);
     }
   }
@@ -165,39 +166,36 @@ export class MovieController extends AbstractComponent {
   }
   getTemplate() {
     return `<section class="films">
-    <section class="films-list">
-      <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
-
-    </section>
-
     </section>`;
   }
-  renderInnerComponents() {
-    const filmsListEl = document.querySelector(`.films-list`);
-    const filmsEl = document.querySelector(`.films`);
 
+  renderInnerComponents() {
     this._filmListObj = new FilmList(this.getFilmCardsObjArr());
     this._filmListObj.unrender();
-    this._filmListObj.render(filmsListEl);
+    this._filmListObj.render(this._cardContainer);
 
     if (!this._lastPortion) {
       this._loadMoreObj = new LoadMore();
       this._loadMoreObj.unrender();
-      this._loadMoreObj.render(filmsListEl);
+      this._loadMoreObj.render(this._cardContainer);
     } else {
       this._loadMoreObj.unrender();
     }
     // extra
+    this._filmListExtraObj.forEach((item) => {
+      item.unrender();
+    });
+    this._filmListExtraObj.splice(0, this._filmListExtraObj.length);
     this._filmListExtraObj.push(new FilmListExtra(this.getTopRatedFilms(), `Top rated`),
         new FilmListExtra(this.getMostCommentedFilms(), `Most commented`));
     this._filmListExtraObj.forEach((item) => {
-      item.unrender();
-      item.render(filmsEl);
+      item.render(this._element);
     });
     this.init();
   }
   render(container) {
     super.render(container);
+    this._element.appendChild(this._cardContainer);
     this.renderInnerComponents();
   }
   init() {

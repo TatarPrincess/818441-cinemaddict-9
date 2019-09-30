@@ -19,17 +19,25 @@ export class FilmDetails extends FilmCard {
     const dt = new Date(ms);
     return dt.toLocaleString(`en`, {day: `numeric`});
   }
+  // alreadyWatchedReaction() {
+  //   const posterSrcEl = this._element.querySelector(`.film-details__poster-img`);
+  //   if (this._alreadyWatched === `true`) {
+  //     const container = this._element.querySelector(`.film-details__inner`);
+  //     const beforeEl = this._element.querySelector(`.form-details__bottom-container`);
+  //     const filmDetailRatingObj = new FilmDetailsRating(posterSrcEl.src, this._alreadyWatched);
+  //     filmDetailRatingObj.render(container, beforeEl);
+  //   } else {
+  //     new FilmDetailsRating(posterSrcEl.src, this._alreadyWatched).unrender();
+  //   }
+  // }
+
   alreadyWatchedReaction() {
-    const posterSrcEl = document.querySelector(`.film-details__poster-img`);
-    if (this._alreadyWatched === `true`) {
-      const container = document.querySelector(`.film-details__inner`);
-      const beforeEl = document.querySelector(`.form-details__bottom-container`);
-      const filmDetailRatingObj = new FilmDetailsRating(posterSrcEl.src, this._alreadyWatched);
-      filmDetailRatingObj.unrender();
-      filmDetailRatingObj.render(container, beforeEl);
-    } else {
-      new FilmDetailsRating(posterSrcEl.src, this._alreadyWatched).unrender();
-    }
+    const posterSrcEl = this._element.querySelector(`.film-details__poster-img`);
+    const container = this._element.querySelector(`.film-details__inner`);
+    const beforeEl = this._element.querySelector(`.form-details__bottom-container`);
+    const filmDetailRatingObj = new FilmDetailsRating(posterSrcEl.src, this._alreadyWatched);
+    filmDetailRatingObj.render(container, beforeEl);
+
   }
 
   render(containerEl) {

@@ -17,18 +17,7 @@ export class FilmListExtra extends AbstractComponent {
     this._element = createElement(this.getTemplate(filmsStr));
     super.render(container);
   }
-  unrender() {
-    const parent = document.querySelector(`body`);
-    let children = document.querySelectorAll(`.${this.getElement().className}`);
-    if (children.length > 1) {
-      children.forEach((item) => {
-        if (parent.contains(item)) {
-          item.remove();
-          this.removeElement();
-        }
-      });
-    }
-  }
+
   getTemplate(cards) {
     return `<section class="films-list--extra">
     <h2 class="films-list__title">${this._type}</h2>

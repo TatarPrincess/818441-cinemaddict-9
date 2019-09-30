@@ -23,10 +23,9 @@ export class AbstractComponent {
     }
   }
   unrender() {
-    const parent = document.querySelector(`body`);
     let child = document.querySelector(`.${this.getElement().className}`);
 
-    if (parent.contains(child)) {
+    if (child !== null) {
       child.remove();
       this.removeElement();
     }
