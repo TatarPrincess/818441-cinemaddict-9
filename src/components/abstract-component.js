@@ -7,12 +7,7 @@ export class AbstractComponent {
     }
     this._element = null;
   }
-  getContainer() {
-    return null;
-  }
-  getCallbackFunc() {
-    return null;
-  }
+
   getTemplate() {
     throw new Error(`Abstract method not implemented: getTemplate`);
   }
@@ -27,6 +22,15 @@ export class AbstractComponent {
       this._element = null;
     }
   }
+  unrender() {
+    let child = document.querySelector(`.${this.getElement().className}`);
+
+    if (child !== null) {
+      child.remove();
+      this.removeElement();
+    }
+  }
+
   render(containerEl) {
     containerEl.appendChild(this.getElement());
   }

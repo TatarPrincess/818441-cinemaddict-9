@@ -20,7 +20,7 @@ const getGenreArr = () => {
   const qant = getItemQuantity();
   let arr = [];
   for (let i = 1; i <= qant; i++) {
-    arr.push([`musical`, `drama`, `Comedy`, `Cartoon`][1 + Math.floor(Math.random() * 4)]);
+    arr.push([`musical`, `drama`, `Comedy`, `Cartoon`][Math.floor(Math.random() * 4)]);
   }
   return arr;
 };
@@ -32,7 +32,7 @@ const getWriters = () => {
   const qant = getItemQuantity();
   let writersTotal = [];
   for (let i = 1; i <= qant; i++) {
-    writersTotal.push(writersArr[1 + Math.floor(Math.random() * 7)]);
+    writersTotal.push(writersArr[Math.floor(Math.random() * 7)]);
   }
   return writersTotal;
 };
@@ -41,7 +41,7 @@ const getActors = () => {
   const qant = getItemQuantity();
   let actorsTotal = [];
   for (let i = 1; i <= qant; i++) {
-    actorsTotal.push(actorsArr[1 + Math.floor(Math.random() * 7)]);
+    actorsTotal.push(actorsArr[Math.floor(Math.random() * 7)]);
   }
   return actorsTotal;
 };
@@ -104,18 +104,17 @@ export const getFilmData = () => (
     `/images/posters/the-man-with-the-golden-arm.jpg`] [Math.floor(Math.random() * 7)],
   description: getDescriptionStr(),
   year: Date.now() + 1 + Math.floor(Math.random() * 100) * 365 * 24 * 60 * 60 * 1000,
-  duration: [`1h 55m`, `54m`, `1h 59m`, `1h 21m`, `16m`][1 + Math.floor(Math.random() * 5)],
+  duration: [`1h 55m`, `54m`, `1h 59m`, `1h 21m`, `16m`][Math.floor(Math.random() * 5)],
   genre: getGenreArr(),
-  rating: [8.3, 3.2, 9.0, 2.3, 6.3][1 + Math.floor(Math.random() * 5)],
-  comments: `${[5, 89, 18, 465, 0][Math.floor(Math.random() * 5)]} comments`,
+  rating: [8.3, 3.2, 9.0, 2.3, 6.3][Math.floor(Math.random() * 5)],
+  director: [`Юлий Цезарь`, `Иван Бунин`, `Сергей Есенин`, `Марина Цветаева`, `Виктория Токарева`, `Алексей Учитель`][Math.floor(Math.random() * 6)],
+  writers: getWriters(),
+  actors: getActors(),
+  country: [`USA`, `GERMANY`, `RUSSIA`, `FRANCE`, `AUSTRIA`, `SPAIN`][Math.floor(Math.random() * 6)],
+  comments: getCommentsTotal(),
   isFavorite: Boolean(Math.floor(Math.random() * 2)),
   alreadyWatched: Boolean(Math.floor(Math.random() * 2)),
   toWatch: Boolean(Math.floor(Math.random() * 2)),
-  director: [`Юлий Цезарь`, `Иван Бунин`, `Сергей Есенин`, `Марина Цветаева`, `Виктория Токарева`, `Алексей Учитель`][1 + Math.floor(Math.random() * 6)],
-  writers: getWriters(),
-  actors: getActors(),
-  country: [`USA`, `GERMANY`, `RUSSIA`, `FRANCE`, `AUSTRIA`, `SPAIN`][1 + Math.floor(Math.random() * 6)],
-  commentsDetail: getCommentsTotal(),
   id: getUuidv4()
   })
 );
@@ -146,7 +145,6 @@ export const getFilterData = (filmData) => {
     if (!foundObj && !additionNeeded) {
       filterData.push({title, count: 0});
     }
-
   };
 
   filmData.forEach((filmDataObj) => titles.forEach((title) => updateFilterData(title, filmDataObj)));
